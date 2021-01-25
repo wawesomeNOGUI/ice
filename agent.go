@@ -1158,8 +1158,8 @@ func (a *Agent) SetRemoteCredentials(remoteUfrag, remotePwd string) error {
 // Restart restarts the ICE Agent with the provided ufrag/pwd
 // If no ufrag/pwd is provided the Agent will generate one itself
 //
-// Restart must only be called when GatheringState is GatheringStateComplete
-// a user must then call GatherCandidates explicitly to start generating new ones
+// If there is a gatherer routine currently running, Restart will
+// cancel it
 func (a *Agent) Restart(ufrag, pwd string) error {
 	if ufrag == "" {
 		var err error
@@ -1186,7 +1186,7 @@ func (a *Agent) Restart(ufrag, pwd string) error {
 	var err error
 	if runErr := a.run(a.context(), func(ctx context.Context, agent *Agent) {
 		if agent.gatheringState == GatheringStateGathering {
-			a.gatherCandidateCancel() // Cancel previous gathering routine
+			agent.gatherCandidateCancel() // Cancel previous gathering routine
 		}
 
 		// Clear all agent needed to take back to fresh state
