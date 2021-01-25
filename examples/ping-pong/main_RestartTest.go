@@ -134,7 +134,7 @@ func main() { //nolint
 	remotePwd := <-remoteAuthChannel
 
 	if err = iceAgent.GatherCandidates(); err != nil {        //start gathering candidates
-		panic(err)                                              //will only find local because no STUN server
+		panic(err)                                        //will only find local because no STUN server
 	}
 
 	if err = iceAgent.Restart(localUfrag, localPwd); err != nil {
