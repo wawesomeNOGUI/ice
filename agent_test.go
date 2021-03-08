@@ -1378,7 +1378,6 @@ func TestAgentRestart(t *testing.T) {
 			DisconnectedTimeout: &oneSecond,
 			FailedTimeout:       &oneSecond,
 		})
-		assert.NoError(t, err)
 
 		connA.agent.gatheringState = GatheringStateGathering
 		
