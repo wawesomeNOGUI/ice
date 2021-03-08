@@ -1187,6 +1187,8 @@ func (a *Agent) Restart(ufrag, pwd string) error {
 	if runErr := a.run(a.context(), func(ctx context.Context, agent *Agent) {
 		if agent.gatheringState == GatheringStateGathering {
 			agent.gatherCandidateCancel() // Cancel previous gathering routine
+			ctx, cancel := context.WithCancel(ctx)
+			a.gatherCandidateCancel = cancel
 		}
 
 		// Clear all agent needed to take back to fresh state
