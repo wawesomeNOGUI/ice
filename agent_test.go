@@ -1380,6 +1380,7 @@ func TestAgentRestart(t *testing.T) {
 		})
 
 		connA.agent.gatheringState = GatheringStateGathering
+		assert.NoError(t, connA.agent.Restart("", ""))
 
 		ctx, cancel := context.WithCancel(context.Background())
 		assert.NoError(t, connB.agent.OnConnectionStateChange(func(c ConnectionState) {
@@ -1387,7 +1388,6 @@ func TestAgentRestart(t *testing.T) {
 				cancel()
 			}
 		}))
-		assert.NoError(t, connA.agent.Restart("", ""))
 
 		<-ctx.Done()
 		assert.NoError(t, connA.agent.Close())
