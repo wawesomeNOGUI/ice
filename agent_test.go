@@ -1381,6 +1381,7 @@ func TestAgentRestart(t *testing.T) {
 
 		connA.agent.gatheringState = GatheringStateGathering
 		assert.NoError(t, connA.agent.Restart("", ""))
+		connA.agent.GatherCandidates()
 
 		ctx, cancel := context.WithCancel(context.Background())
 		assert.NoError(t, connB.agent.OnConnectionStateChange(func(c ConnectionState) {
