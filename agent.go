@@ -1159,7 +1159,9 @@ func (a *Agent) SetRemoteCredentials(remoteUfrag, remotePwd string) error {
 // If no ufrag/pwd is provided the Agent will generate one itself
 //
 // If there is a gatherer routine currently running, Restart will
-// cancel it
+// cancel it.
+// After a Restart, the user must then call GatherCandidates explicitly
+// to start generating new ones.
 func (a *Agent) Restart(ufrag, pwd string) error {
 	if ufrag == "" {
 		var err error
@@ -1187,8 +1189,6 @@ func (a *Agent) Restart(ufrag, pwd string) error {
 	if runErr := a.run(a.context(), func(ctx context.Context, agent *Agent) {
 		if agent.gatheringState == GatheringStateGathering {
 			agent.gatherCandidateCancel() // Cancel previous gathering routine
-			_, cancel := context.WithCancel(ctx)
-			agent.gatherCandidateCancel = cancel
 		}
 
 		// Clear all agent needed to take back to fresh state
