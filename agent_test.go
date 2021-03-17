@@ -1379,16 +1379,14 @@ func TestAgentRestart(t *testing.T) {
 			FailedTimeout:       &oneSecond,
 		})
 
-		connA.agent.gatheringState = GatheringStateGathering
-		assert.NoError(t, connA.agent.Restart("", ""))
-		assert.NoError(t, connA.agent.GatherCandidates())
-
 		ctx, cancel := context.WithCancel(context.Background())
 		assert.NoError(t, connB.agent.OnConnectionStateChange(func(c ConnectionState) {
 			if c == ConnectionStateFailed || c == ConnectionStateDisconnected {
 				cancel()
 			}
 		}))
+		connA.agent.gatheringState = GatheringStateGathering
+		assert.NoError(t, connA.agent.Restart("", ""))
 
 		<-ctx.Done()
 		assert.NoError(t, connA.agent.Close())
