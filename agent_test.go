@@ -1385,6 +1385,7 @@ func TestAgentRestart(t *testing.T) {
 				cancel()
 			}
 		}))
+		// Set gatheringState to GatheringStateGathering to test if statement in agent.Restart
 		connA.agent.gatheringState = GatheringStateGathering
 		assert.NoError(t, connA.agent.Restart("", ""))
 
